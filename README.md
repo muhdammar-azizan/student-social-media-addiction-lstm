@@ -1,5 +1,9 @@
 # Student Social Media Addiction LSTM Classifier
 
+![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.11-orange.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
 LSTM neural network project to classify student social media addiction levels (`Addicted_Score`) based on demographic, social media usage, mental health, and relationship status features. Built for BCS2313 Artificial Intelligence Techniques (UMPSA).
 
 ## Objective
@@ -10,6 +14,9 @@ Classify each student's addiction score using an LSTM model trained on the [Stud
 
 ```
 .
+├── assets/
+│   ├── before_after_training_comparison.png  Accuracy and loss, before and after
+│   └── confusion_matrix_improved.png         Confusion matrix, best model
 ├── data/
 │   └── Students Social Media Addiction.csv   Dataset
 ├── notebooks/
@@ -27,6 +34,8 @@ Classify each student's addiction score using an LSTM model trained on the [Stud
    ```bash
    pip install -r requirements.txt
    ```
+
+Note: this notebook was originally developed and tested using TensorFlow 2.11 on Python 3.7. requirements.txt recommends newer versions for easier installation on a modern machine. The overall logic and conclusions should remain the same with newer library versions, but exact accuracy figures may shift slightly, as explained in Limitations below.
 
 ## Running the Notebook
 
@@ -48,6 +57,21 @@ The notebook trains four LSTM models on the same train test split, each building
 ## Summary of Results
 
 The improved model (EarlyStopping and regularization, no class weighting) is the best performing model in this notebook, reaching a test accuracy of roughly 90 percent, with a much smaller gap between training and validation accuracy than the two baseline runs. The exact figure can vary by about one test sample between separate full runs of the notebook (see Limitations below), and the notebook includes a step by step manual verification, using the trace of the confusion matrix divided by the total number of samples, confirming this accuracy matches scikit learn's own calculation exactly.
+
+**Before vs after training behavior (Set 2 baseline vs improved model):**
+
+![Before and after training comparison](assets/before_after_training_comparison.png)
+
+**Confusion matrix for the best model (improved model):**
+
+![Confusion matrix for the improved model](assets/confusion_matrix_improved.png)
+
+## Key Findings
+
+- Reduced the gap between training and validation accuracy from about 7.6 percentage points in the baseline model (Set 1) to about 5.1 percentage points in the improved model, using EarlyStopping and additional regularization.
+- Found that class weighting could not fix the smallest classes in this dataset. One class has zero samples in the training set entirely, so no weighting technique can teach the model something it never saw, an honest limitation documented directly in the notebook instead of being hidden.
+- Verified the model's accuracy using three independent calculation methods within the same run (a manual formula based on the confusion matrix trace, scikit learn's accuracy_score, and Keras model.evaluate), all producing the identical result.
+- Achieved a test accuracy of roughly 89 to 92 percent for the best model, with results varying slightly between separate runs due to TensorFlow's own floating point behavior, a limitation documented honestly rather than presented as a single fixed number.
 
 ## Dataset
 
